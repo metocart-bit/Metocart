@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Metocart – IT Consulting & Digital Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #050A14;
+      --surface: #0C1526;
+      --surface2: #111E35;
+      --accent: #00C8FF;
+      --accent2: #0057FF;
+      --gold: #F5A623;
+      --text: #E8EEF8;
+      --muted: #7A8BAD;
+      --border: rgba(0,200,255,0.12);
+      --glow: 0 0 40px rgba(0,200,255,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: 0.5;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 72px;
+      background: rgba(5,10,20,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      padding: 0.5rem 1.4rem;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .nav-cta:hover {
+      background: var(--accent);
+      color: var(--bg);
+      box-shadow: 0 0 20px rgba(0,200,255,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 100px 10vw 60px;
+      overflow: hidden;
+    }
+
+    /* Orb backgrounds */
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(100px); pointer-events: none;
+    }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,87,255,0.25) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,200,255,0.15) 0%, transparent 70%);
+      bottom: 0; left: 5vw;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-30px); }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block; width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-headline .line-accent { color: var(--accent); }
+    .hero-headline .line-dim { color: var(--muted); }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .btn-primary {
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff;
+      border: none; border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 4px 24px rgba(0,200,255,0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,200,255,0.4);
+    }
+
+    .btn-ghost {
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      position: relative; z-index: 1;
+      display: flex; gap: 0; flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(12,21,38,0.7);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-item {
+      flex: 1; min-width: 180px;
+      padding: 2rem 3rem;
+      border-right: 1px solid var(--border);
+      opacity: 0; animation: fadeUp 0.6s forwards;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item:nth-child(1) { animation-delay: 1s; }
+    .stat-item:nth-child(2) { animation-delay: 1.1s; }
+    .stat-item:nth-child(3) { animation-delay: 1.2s; }
+    .stat-item:nth-child(4) { animation-delay: 1.3s; }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.25rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative; z-index: 1;
+      padding: 100px 10vw;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .section-label::before {
+      content: ''; display: inline-block;
+      width: 24px; height: 1px; background: var(--accent);
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 560px;
+      font-size: 1rem;
+      margin-bottom: 4rem;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--surface); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      background: var(--surface);
+      padding: 2.5rem;
+      cursor: default;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--accent);
+      transition: height 0.4s ease;
+    }
+    .service-card:hover { background: var(--surface2); }
+    .service-card:hover::before { height: 100%; }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      border-radius: 8px;
+      background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-tags {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+    }
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(0,200,255,0.06);
+      border: 1px solid rgba(0,200,255,0.15);
+      border-radius: 2px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── WHY US ── */
+    #why { background: var(--bg); }
+
+    .why-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .why-visual {
+      position: relative;
+    }
+
+    .tech-stack-visual {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .tech-stack-visual::after {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px; right: -1px; bottom: -1px;
+      background: linear-gradient(135deg, var(--accent2) 0%, transparent 50%);
+      opacity: 0.08;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .stack-row {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;
+    }
+
+    .stack-chip {
+      padding: 0.5rem 1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .stack-chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,200,255,0.06);
+    }
+
+    .why-points {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+
+    .why-point {
+      display: flex; gap: 1.5rem; align-items: flex-start;
+    }
+
+    .why-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      padding-top: 0.25rem;
+      min-width: 2.5rem;
+    }
+
+    .why-point-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .why-point-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* ── PROCESS ── */
+    #process { background: var(--surface); }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .process-steps::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.2;
+    }
+
+    .step {
+      padding: 2.5rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .step:last-child { border-right: none; }
+
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: rgba(0,200,255,0.08);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .step-desc {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    /* ── CTA ── */
+    #contact {
+      background: var(--bg);
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top, rgba(0,87,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-box .section-title { margin-bottom: 1rem; }
+
+    .cta-box p {
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-form {
+      display: flex; flex-direction: column; gap: 1rem;
+      text-align: left;
+    }
+
+    .form-row { display: flex; gap: 1rem; }
+
+    .form-group {
+      display: flex; flex-direction: column; gap: 0.4rem;
+      flex: 1;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group select option { background: var(--surface); }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 4rem 10vw 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand .nav-logo {
+      display: inline-block; margin-bottom: 1rem;
+    }
+
+    .footer-brand p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+
+    .footer-col ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .footer-bottom a { color: var(--accent); text-decoration: none; }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      overflow: hidden;
+      background: rgba(0,200,255,0.04);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      white-space: nowrap;
+      position: relative; z-index: 1;
+    }
+
+    .ticker-track {
+      display: inline-block;
+      animation: ticker 30s linear infinite;
+    }
+
+    .ticker-item {
+      display: inline-block;
+      padding: 0 2.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .ticker-item span { color: var(--accent); margin-right: 0.5rem; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── ZERO DOWNTIME SECTION ── */
+    .zd-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .zd-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2.5rem;
+    }
+
+    .zd-featured {
+      border-color: rgba(0,200,255,0.3);
+      box-shadow: 0 0 40px rgba(0,200,255,0.06);
+    }
+
+    .zd-icon-row { margin-bottom: 1.2rem; }
+
+    .zd-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+    }
+    .zd-badge::before {
+      content: '●';
+      font-size: 0.6rem;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .zd-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .zd-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .zd-pillars { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .zd-pillar {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .zd-pillar:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .zd-pillar-icon {
+      font-size: 1.2rem;
+      min-width: 2rem;
+      text-align: center;
+      padding-top: 0.1rem;
+    }
+
+    .zd-pillar strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      margin-bottom: 0.2rem;
+      color: var(--text);
+    }
+
+    .zd-pillar p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Right column */
+    .zd-right { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .zd-metric-card, .zd-checklist-card, .zd-pulse-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.75rem;
+    }
+
+    .zd-metric-header {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .zd-bars { display: flex; flex-direction: column; gap: 1rem; }
+
+    .zd-bar-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr auto;
+      align-items: center; gap: 0.75rem;
+    }
+
+    .zd-bar-label { font-size: 0.78rem; color: var(--muted); }
+
+    .zd-bar-track {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .zd-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 3px;
+      animation: barGrow 1.5s ease forwards;
+    }
+
+    @keyframes barGrow {
+      from { width: 0 !important; }
+    }
+
+    .zd-bar-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .zd-checklist { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+
+    .zd-checklist li {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .zd-check {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.85rem;
+      min-width: 1.2rem;
+    }
+
+    .zd-pulse-card {
+      display: flex; align-items: center; gap: 1rem;
+      border-color: rgba(0,200,255,0.2);
+      background: rgba(0,200,255,0.04);
+    }
+
+    .zd-pulse-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34,197,94,0.5);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+      70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+
+    @media (max-width: 900px) {
+      .zd-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── DIGITAL & MARKETING SECTION ── */
+    #digital { background: var(--surface); }
+
+    .dm-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-bottom: 5rem;
+    }
+
+    .dm-intro-label {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+
+    .dm-headline {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+    }
+
+    .dm-headline .gold { color: var(--gold); }
+
+    .dm-body {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .dm-feature-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+
+    .dm-feature-list li {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .dm-feature-list li::before {
+      content: '→';
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Right side: marketing funnel visual */
+    .dm-funnel {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .funnel-stage {
+      position: relative;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--bg);
+      display: flex; align-items: center; gap: 1rem;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .funnel-stage:first-child { border-radius: 8px 8px 0 0; }
+    .funnel-stage:last-child  { border-bottom: 1px solid var(--border); border-radius: 0 0 8px 8px; }
+
+    .funnel-stage:hover { background: var(--surface2); }
+
+    .funnel-icon {
+      width: 38px; height: 38px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+      background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.15);
+    }
+
+    .funnel-text strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .funnel-text span {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .funnel-arrow {
+      margin-left: auto; color: var(--gold);
+      font-size: 0.75rem; opacity: 0.5;
+    }
+
+    /* Connector line between stages */
+    .funnel-connector {
+      width: 2px; height: 16px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      margin: 0 auto;
+      opacity: 0.25;
+    }
+
+    /* Service cards grid for digital */
+    .dm-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .dm-card {
+      background: var(--surface);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .dm-card:hover { background: var(--surface2); }
+
+    .dm-card-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .dm-card:hover .dm-card-accent { transform: scaleX(1); }
+
+    .dm-card-icon {
+      width: 44px; height: 44px;
+      background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .dm-card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+
+    .dm-card-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .dm-tags {
+      display: flex; flex-wrap: wrap; gap: 0.35rem;
+    }
+
+    .dm-tag {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.55rem;
+      background: rgba(245,166,35,0.06);
+      border: 1px solid rgba(245,166,35,0.15);
+      border-radius: 2px;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ROI metric strip */
+    .dm-roi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid rgba(245,166,35,0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 3rem;
+      background: rgba(245,166,35,0.03);
+    }
+
+    .dm-roi-item {
+      padding: 1.75rem;
+      text-align: center;
+      border-right: 1px solid rgba(245,166,35,0.1);
+    }
+
+    .dm-roi-item:last-child { border-right: none; }
+
+    .dm-roi-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .dm-roi-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 900px) {
+      .dm-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .dm-roi-strip { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── TEAM / EXPERTS SECTION ── */
+    #team { background: var(--bg); }
+
+    .team-intro {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .team-intro-text { max-width: 540px; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1100px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .team-grid { grid-template-columns: 1fr 1fr; } }
+
+    .expert-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      cursor: default;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+    }
+
+    .expert-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,200,255,0.12);
+      border-color: rgba(0,200,255,0.3);
+    }
+
+    /* animated top border on hover */
+    .expert-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .expert-card:hover::before { transform: scaleX(1); }
+
+    .expert-avatar {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem;
+      background: var(--surface2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Unique gradient per card using nth-child */
+    .expert-card:nth-child(1) .expert-avatar { background: linear-gradient(135deg, #0a1f4a 0%, #0d3070 100%); }
+    .expert-card:nth-child(2) .expert-avatar { background: linear-gradient(135deg, #0a2a1a 0%, #0d4a2a 100%); }
+    .expert-card:nth-child(3) .expert-avatar { background: linear-gradient(135deg, #2a1a0a 0%, #4a2d0d 100%); }
+    .expert-card:nth-child(4) .expert-avatar { background: linear-gradient(135deg, #1a0a2a 0%, #2e0d4a 100%); }
+    .expert-card:nth-child(5) .expert-avatar { background: linear-gradient(135deg, #0a2a2a 0%, #0d4040 100%); }
+
+    .expert-initials {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      color: rgba(255,255,255,0.15);
+      position: absolute;
+      bottom: 0.5rem; right: 0.75rem;
+      line-height: 1;
+    }
+
+    .expert-emoji {
+      font-size: 3rem;
+      position: relative; z-index: 1;
+    }
+
+    .expert-body {
+      padding: 1.25rem 1.25rem 1.5rem;
+    }
+
+    .expert-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+      line-height: 1.2;
+    }
+
+    .expert-role {
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .expert-bio {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .expert-skills {
+      display: flex; flex-wrap: wrap; gap: 0.3rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .expert-skill {
+      font-size: 0.62rem;
+      padding: 0.2rem 0.5rem;
+      background: rgba(0,200,255,0.06);
+      border: 1px solid rgba(0,200,255,0.13);
+      border-radius: 2px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .expert-cta {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      border-top: 1px solid var(--border);
+      padding-top: 0.9rem;
+      transition: gap 0.2s;
+    }
+    .expert-card:hover .expert-cta { gap: 0.7rem; }
+
+    /* availability dot */
+    .avail-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+      margin-left: auto;
+    }
+
+    /* CTA below the team grid */
+    .team-cta-strip {
+      margin-top: 3rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+
+    .team-cta-strip p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 500px;
+    }
+
+    .team-cta-strip strong { color: var(--text); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 5vw; }
+      .nav-links { display: none; }
+      section { padding: 70px 6vw; }
+      .hero { padding: 100px 6vw 50px; }
+      .why-split { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { flex-direction: column; }
+      .stat-item { padding: 1.5rem 2rem; }
+      .cta-box { padding: 3rem 2rem; }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); border-radius: 2px;
+    }
+    @media (max-width: 768px) { .hamburger { display: flex; } }
+
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">meto<span>cart</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#digital">Digital & Marketing</a></li>
+    <li><a href="#zero-downtime">Zero Downtime</a></li>
+    <li><a href="#team">Our Experts</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <p class="hero-eyebrow">IT Consulting & Digital Transformation</p>
+  <h1 class="hero-headline">
+    We Build the<br/>
+    <span class="line-accent">Infrastructure</span><br/>
+    <span class="line-dim">Your Business</span><br/>
+    Runs On.
+  </h1>
+  <p class="hero-sub">
+    Metocart delivers enterprise-grade IT consulting, Java application support, DevOps automation, cloud architecture, compliance & security management — all on a <strong style="color:var(--accent);font-weight:500;">zero downtime</strong> strategy.
+  </p>
+  <div class="hero-actions">
+    <a href="#services" class="btn-primary">Explore Services</a>
+    <a href="#contact" class="btn-ghost">Talk to an Expert</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">200+</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">98%</div>
+    <div class="stat-label">Client Retention</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">40+</div>
+    <div class="stat-label">Expert Engineers</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">24/7</div>
+    <div class="stat-label">Support Coverage</div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item"><span>✦</span> Website Design & Development</span>
+    <span class="ticker-item"><span>✦</span> Digital Marketing Strategy</span>
+    <span class="ticker-item"><span>✦</span> SEO & Search Visibility</span>
+    <span class="ticker-item"><span>✦</span> Performance & Paid Media</span>
+    <span class="ticker-item"><span>✦</span> Content & Brand Marketing</span>
+    <span class="ticker-item"><span>✦</span> Java Application Support</span>
+    <span class="ticker-item"><span>✦</span> Zero Downtime Deployments</span>
+    <span class="ticker-item"><span>✦</span> Web & App Server Management</span>
+    <span class="ticker-item"><span>✦</span> Database Compliance & Security</span>
+    <span class="ticker-item"><span>✦</span> DevOps Automation</span>
+    <span class="ticker-item"><span>✦</span> Cloud Architecture</span>
+    <span class="ticker-item"><span>✦</span> Analytics & ROI Reporting</span>
+    <span class="ticker-item"><span>✦</span> GDPR · SOX · HIPAA · PCI-DSS</span>
+    <span class="ticker-item"><span>✦</span> Website Design & Development</span>
+    <span class="ticker-item"><span>✦</span> Digital Marketing Strategy</span>
+    <span class="ticker-item"><span>✦</span> SEO & Search Visibility</span>
+    <span class="ticker-item"><span>✦</span> Performance & Paid Media</span>
+    <span class="ticker-item"><span>✦</span> Content & Brand Marketing</span>
+    <span class="ticker-item"><span>✦</span> Java Application Support</span>
+    <span class="ticker-item"><span>✦</span> Zero Downtime Deployments</span>
+    <span class="ticker-item"><span>✦</span> Web & App Server Management</span>
+    <span class="ticker-item"><span>✦</span> Database Compliance & Security</span>
+    <span class="ticker-item"><span>✦</span> DevOps Automation</span>
+    <span class="ticker-item"><span>✦</span> Cloud Architecture</span>
+    <span class="ticker-item"><span>✦</span> Analytics & ROI Reporting</span>
+    <span class="ticker-item"><span>✦</span> GDPR · SOX · HIPAA · PCI-DSS</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="section-label reveal">What We Do</p>
+  <h2 class="section-title reveal">Services Built for<br/>Business Impact</h2>
+  <p class="section-desc reveal">From legacy modernization to cloud-native pipelines, every service we deliver is engineered to generate measurable value.</p>
+
+  <div class="services-grid">
+
+    <div class="service-card reveal">
+      <div class="service-icon">🚀</div>
+      <div class="service-title">DevOps & CI/CD Engineering</div>
+      <p class="service-desc">Automate your delivery pipeline end-to-end. We implement CI/CD workflows, container orchestration, and infrastructure-as-code so your teams ship faster with fewer errors.</p>
+      <div class="service-tags">
+        <span class="tag">Jenkins</span>
+        <span class="tag">GitHub Actions</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">Terraform</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">☁️</div>
+      <div class="service-title">Cloud Architecture & Migration</div>
+      <p class="service-desc">Design and migrate to scalable cloud environments on AWS, Azure, or GCP. We reduce costs, improve reliability, and accelerate your cloud adoption roadmap.</p>
+      <div class="service-tags">
+        <span class="tag">AWS</span>
+        <span class="tag">Azure</span>
+        <span class="tag">GCP</span>
+        <span class="tag">Multi-cloud</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🔧</div>
+      <div class="service-title">Application Modernization</div>
+      <p class="service-desc">Transform legacy monoliths into modern microservices. We refactor, re-platform, and re-architect existing applications to unlock scalability, performance, and developer productivity.</p>
+      <div class="service-tags">
+        <span class="tag">Microservices</span>
+        <span class="tag">API Design</span>
+        <span class="tag">React</span>
+        <span class="tag">Node.js</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🌐</div>
+      <div class="service-title">Networking & Infrastructure</div>
+      <p class="service-desc">Design secure, high-performance network architectures. From SD-WAN to zero-trust security models, we build the backbone your business relies on.</p>
+      <div class="service-tags">
+        <span class="tag">SD-WAN</span>
+        <span class="tag">Firewalls</span>
+        <span class="tag">VPN</span>
+        <span class="tag">Zero Trust</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🛡️</div>
+      <div class="service-title">Cybersecurity & Compliance</div>
+      <p class="service-desc">Protect your organization with security audits, threat modeling, and compliance frameworks. We implement SIEM, vulnerability management, and incident response playbooks.</p>
+      <div class="service-tags">
+        <span class="tag">SOC2</span>
+        <span class="tag">ISO 27001</span>
+        <span class="tag">Pen Testing</span>
+        <span class="tag">SIEM</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">📊</div>
+      <div class="service-title">IT Strategy & Consulting</div>
+      <p class="service-desc">Align your technology investments with business goals. Our vCTO and advisory services provide strategic roadmaps, vendor selection, and technology governance frameworks.</p>
+      <div class="service-tags">
+        <span class="tag">IT Roadmap</span>
+        <span class="tag">vCTO</span>
+        <span class="tag">Vendor Mgmt</span>
+        <span class="tag">Governance</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">☕</div>
+      <div class="service-title">Java Application Support</div>
+      <p class="service-desc">End-to-end support for enterprise Java applications — from JVM tuning and heap analysis to patch management, bug triage, performance profiling, and production incident response.</p>
+      <div class="service-tags">
+        <span class="tag">Java EE</span>
+        <span class="tag">Spring Boot</span>
+        <span class="tag">JVM Tuning</span>
+        <span class="tag">Microservices</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🖥️</div>
+      <div class="service-title">Web & Application Server Management</div>
+      <p class="service-desc">Comprehensive administration, hardening, and performance tuning of web and application servers. We manage deployments, SSL/TLS certificates, load balancing, and health monitoring.</p>
+      <div class="service-tags">
+        <span class="tag">Apache</span>
+        <span class="tag">Nginx</span>
+        <span class="tag">Tomcat</span>
+        <span class="tag">WebLogic</span>
+        <span class="tag">JBoss</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🗄️</div>
+      <div class="service-title">Database Compliance & Security</div>
+      <p class="service-desc">Protect your data assets and meet regulatory obligations. We audit database configurations, implement encryption, manage access controls, and enforce compliance with GDPR, SOX, HIPAA, and PCI-DSS.</p>
+      <div class="service-tags">
+        <span class="tag">Oracle DB</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">GDPR</span>
+        <span class="tag">PCI-DSS</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ZERO DOWNTIME SECTION -->
+<section id="zero-downtime" style="background:var(--bg);overflow:hidden;">
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(0,200,255,0.12) 0%,transparent 70%);top:-100px;right:-100px;filter:blur(80px);position:absolute;pointer-events:none;"></div>
+
+  <p class="section-label reveal">Our Core Commitment</p>
+  <h2 class="section-title reveal">Zero Downtime.<br/><span style="color:var(--accent)">Always On.</span></h2>
+  <p class="section-desc reveal">Business doesn't stop — and neither should your systems. Every Metocart engagement is engineered around a zero downtime strategy that eliminates maintenance windows, prevents unplanned outages, and keeps your users happy around the clock.</p>
+
+  <div class="zd-grid reveal">
+
+    <div class="zd-card zd-featured">
+      <div class="zd-icon-row">
+        <div class="zd-badge">Zero Downtime Strategy</div>
+      </div>
+      <h3 class="zd-title">How We Keep You Running</h3>
+      <p class="zd-desc">Our layered approach ensures every upgrade, patch, deployment, and infrastructure change happens without your users ever feeling a thing.</p>
+      <div class="zd-pillars">
+        <div class="zd-pillar">
+          <span class="zd-pillar-icon">🔄</span>
+          <div>
+            <strong>Rolling Deployments</strong>
+            <p>Progressive rollouts with automated health checks — bad builds are caught and rolled back before users are impacted.</p>
+          </div>
+        </div>
+        <div class="zd-pillar">
+          <span class="zd-pillar-icon">🔵🟢</span>
+          <div>
+            <strong>Blue/Green Switching</strong>
+            <p>Maintain two identical production environments. Switch traffic instantly with zero user disruption during major releases.</p>
+          </div>
+        </div>
+        <div class="zd-pillar">
+          <span class="zd-pillar-icon">🐦</span>
+          <div>
+            <strong>Canary Releases</strong>
+            <p>Route a small percentage of traffic to new versions first, validate with real data, then promote to 100% with confidence.</p>
+          </div>
+        </div>
+        <div class="zd-pillar">
+          <span class="zd-pillar-icon">🗄️</span>
+          <div>
+            <strong>Online Schema Migrations</strong>
+            <p>Database changes — schema alterations, index builds, data migrations — executed live with no locking or downtime.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zd-right">
+      <div class="zd-metric-card">
+        <div class="zd-metric-header">Uptime SLA Targets</div>
+        <div class="zd-bars">
+          <div class="zd-bar-row">
+            <span class="zd-bar-label">Application Layer</span>
+            <div class="zd-bar-track"><div class="zd-bar-fill" style="width:99.9%"></div></div>
+            <span class="zd-bar-val">99.9%</span>
+          </div>
+          <div class="zd-bar-row">
+            <span class="zd-bar-label">Web / App Servers</span>
+            <div class="zd-bar-track"><div class="zd-bar-fill" style="width:99.95%"></div></div>
+            <span class="zd-bar-val">99.95%</span>
+          </div>
+          <div class="zd-bar-row">
+            <span class="zd-bar-label">Database Layer</span>
+            <div class="zd-bar-track"><div class="zd-bar-fill" style="width:99.99%"></div></div>
+            <span class="zd-bar-val">99.99%</span>
+          </div>
+          <div class="zd-bar-row">
+            <span class="zd-bar-label">Network Infrastructure</span>
+            <div class="zd-bar-track"><div class="zd-bar-fill" style="width:100%"></div></div>
+            <span class="zd-bar-val">99.99%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="zd-checklist-card">
+        <div class="zd-metric-header">Zero Downtime Checklist</div>
+        <ul class="zd-checklist">
+          <li><span class="zd-check">✓</span> Automated failover & health probes</li>
+          <li><span class="zd-check">✓</span> Multi-AZ & geo-redundant deployments</li>
+          <li><span class="zd-check">✓</span> Load-balanced web & app server clusters</li>
+          <li><span class="zd-check">✓</span> DB replication with automatic promotion</li>
+          <li><span class="zd-check">✓</span> Live certificate renewal (no restart)</li>
+          <li><span class="zd-check">✓</span> Backward-compatible API versioning</li>
+          <li><span class="zd-check">✓</span> Real-time alerting (MTTR &lt; 5 min)</li>
+          <li><span class="zd-check">✓</span> DR drills & runbook documentation</li>
+        </ul>
+      </div>
+
+      <div class="zd-pulse-card">
+        <div class="zd-pulse-dot"></div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:0.95rem;">All Systems Operational</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Continuous monitoring · 24 / 7 / 365</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DIGITAL MARKETING & BUSINESS WEBSITE -->
+<section id="digital">
+  <p class="section-label reveal">Website & Digital Growth</p>
+  <h2 class="section-title reveal">Your Digital Presence<br/>Is a <span style="color:var(--gold)">Business Asset</span></h2>
+  <p class="section-desc reveal">We design, build, and market high-performance websites and digital strategies that turn visitors into loyal customers — giving your business a competitive edge online.</p>
+
+  <div class="dm-layout">
+    <!-- Left: intro + feature list -->
+    <div>
+      <div class="dm-intro-label">Full-Stack Digital Partner</div>
+      <h3 class="dm-headline">From Website<br/>to <span class="gold">Market Leader</span></h3>
+      <p class="dm-body">
+        Most businesses have a website. Few have a <em>digital growth engine</em>. Metocart bridges the gap between technology and marketing — we build fast, secure, scalable websites backed by data-driven marketing strategies that generate real business results.
+      </p>
+      <p class="dm-body">
+        Whether you're launching a new brand, modernizing a legacy site, or scaling your existing application's reach, our team delivers end-to-end digital solutions — from architecture and development to SEO, paid campaigns, and conversion optimization.
+      </p>
+      <ul class="dm-feature-list">
+        <li>Custom business website design & development</li>
+        <li>E-commerce & booking application support</li>
+        <li>SEO strategy &amp; technical optimization</li>
+        <li>Performance marketing & paid media management</li>
+        <li>Content marketing & brand storytelling</li>
+        <li>CRM integration &amp; marketing automation</li>
+        <li>Analytics, dashboards &amp; ROI reporting</li>
+        <li>Social media strategy &amp; community management</li>
+      </ul>
+    </div>
+
+    <!-- Right: marketing funnel visual -->
+    <div>
+      <p style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Our Digital Growth Funnel</p>
+      <div class="dm-funnel">
+        <div class="funnel-stage reveal">
+          <div class="funnel-icon">🌐</div>
+          <div class="funnel-text">
+            <strong>Attract</strong>
+            <span>SEO · Content · Paid Search · Social Ads</span>
+          </div>
+          <span class="funnel-arrow">▶</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-stage reveal">
+          <div class="funnel-icon">🏠</div>
+          <div class="funnel-text">
+            <strong>Convert</strong>
+            <span>Landing Pages · UX Design · A/B Testing</span>
+          </div>
+          <span class="funnel-arrow">▶</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-stage reveal">
+          <div class="funnel-icon">🤝</div>
+          <div class="funnel-text">
+            <strong>Engage</strong>
+            <span>Email Automation · CRM · Retargeting</span>
+          </div>
+          <span class="funnel-arrow">▶</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-stage reveal">
+          <div class="funnel-icon">📈</div>
+          <div class="funnel-text">
+            <strong>Retain & Scale</strong>
+            <span>Analytics · Loyalty · Referral Programs</span>
+          </div>
+          <span class="funnel-arrow">▶</span>
+        </div>
+        <div class="funnel-connector"></div>
+        <div class="funnel-stage reveal">
+          <div class="funnel-icon">💰</div>
+          <div class="funnel-text">
+            <strong>Measure ROI</strong>
+            <span>Dashboards · Attribution · Growth Reporting</span>
+          </div>
+          <span class="funnel-arrow">▶</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service cards -->
+  <div class="dm-cards">
+    <div class="dm-card reveal">
+      <div class="dm-card-accent"></div>
+      <div class="dm-card-icon">🖥️</div>
+      <div class="dm-card-title">Business Website Development</div>
+      <p class="dm-card-desc">Fast, responsive, accessible websites built on modern stacks. We design for conversion, build for performance, and optimize for search engines from day one.</p>
+      <div class="dm-tags">
+        <span class="dm-tag">React / Next.js</span>
+        <span class="dm-tag">WordPress</span>
+        <span class="dm-tag">Headless CMS</span>
+        <span class="dm-tag">Core Web Vitals</span>
+      </div>
+    </div>
+
+    <div class="dm-card reveal">
+      <div class="dm-card-accent"></div>
+      <div class="dm-card-icon">📣</div>
+      <div class="dm-card-title">Digital Marketing Strategy</div>
+      <p class="dm-card-desc">Data-driven marketing strategies tailored to your market, audience, and revenue goals. We map the full customer journey and activate the right channels to reach them.</p>
+      <div class="dm-tags">
+        <span class="dm-tag">Market Research</span>
+        <span class="dm-tag">Persona Mapping</span>
+        <span class="dm-tag">Channel Strategy</span>
+        <span class="dm-tag">KPI Frameworks</span>
+      </div>
+    </div>
+
+    <div class="dm-card reveal">
+      <div class="dm-card-accent"></div>
+      <div class="dm-card-icon">🔍</div>
+      <div class="dm-card-title">SEO & Search Visibility</div>
+      <p class="dm-card-desc">Technical SEO audits, on-page optimization, backlink strategy, and local SEO. We make your business discoverable where it counts — in the search results your customers actually see.</p>
+      <div class="dm-tags">
+        <span class="dm-tag">Technical SEO</span>
+        <span class="dm-tag">Link Building</span>
+        <span class="dm-tag">Schema Markup</span>
+        <span class="dm-tag">Core Web Vitals</span>
+      </div>
+    </div>
+
+    <div class="dm-card reveal">
+      <div class="dm-card-accent"></div>
+      <div class="dm-card-icon">🎯</div>
+      <div class="dm-card-title">Performance & Paid Media</div>
+      <p class="dm-card-desc">ROI-focused ad campaigns across Google, Meta, and LinkedIn. We manage targeting, creatives, budgets, and bidding — continuously optimizing for cost-per-acquisition.</p>
+      <div class="dm-tags">
+        <span class="dm-tag">Google Ads</span>
+        <span class="dm-tag">Meta Ads</span>
+        <span class="dm-tag">LinkedIn</span>
+        <span class="dm-tag">Retargeting</span>
+      </div>
+    </div>
+
+    <div class="dm-card reveal">
+      <div class="dm-card-accent"></div>
+      <div class="dm-card-icon">✍️</div>
+      <div class="dm-card-title">Content & Brand Marketing</div>
+      <p class="dm-card-desc">Compelling content that builds authority and trust. From thought leadership blogs and case studies to social media content calendars and email nurture sequences.</p>
+      <div class="dm-tags">
+        <span class="dm-tag">Copywriting</span>
+        <span class="dm-tag">Blog Strategy</span>
+        <span class="dm-tag">Email Marketing</span>
+        <span class="dm-tag">Social Media</span>
+      </div>
+    </div>
+
+    <div class="dm-card reveal">
+      <div class="dm-card-accent"></div>
+      <div class="dm-card-icon">📊</div>
+      <div class="dm-card-title">Analytics & Growth Reporting</div>
+      <p class="dm-card-desc">Custom dashboards and attribution models that connect marketing activity to revenue. We make your data actionable so you know exactly what's working and where to invest next.</p>
+      <div class="dm-tags">
+        <span class="dm-tag">GA4</span>
+        <span class="dm-tag">Looker Studio</span>
+        <span class="dm-tag">Attribution</span>
+        <span class="dm-tag">Conversion Tracking</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROI Strip -->
+  <div class="dm-roi-strip reveal">
+    <div class="dm-roi-item">
+      <div class="dm-roi-num">3.2×</div>
+      <div class="dm-roi-label">Avg. Traffic Growth</div>
+    </div>
+    <div class="dm-roi-item">
+      <div class="dm-roi-num">65%</div>
+      <div class="dm-roi-label">Lower Cost Per Lead</div>
+    </div>
+    <div class="dm-roi-item">
+      <div class="dm-roi-num">48h</div>
+      <div class="dm-roi-label">Website Go-Live Time</div>
+    </div>
+    <div class="dm-roi-item">
+      <div class="dm-roi-num">100%</div>
+      <div class="dm-roi-label">Data-Driven Decisions</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <p class="section-label reveal">Why Metocart</p>
+  <h2 class="section-title reveal">Engineering Excellence,<br/>Business Results</h2>
+  <p class="section-desc reveal">We're not just consultants — we're builders embedded in your team until the job is done right.</p>
+
+  <div class="why-split">
+    <div class="why-visual reveal">
+      <div class="tech-stack-visual">
+        <p style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;">Technology Stack Expertise</p>
+        <div class="stack-row">
+          <span class="stack-chip active">Kubernetes</span>
+          <span class="stack-chip active">Docker</span>
+          <span class="stack-chip">Helm</span>
+          <span class="stack-chip active">Terraform</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-chip active">AWS</span>
+          <span class="stack-chip">Azure</span>
+          <span class="stack-chip active">GCP</span>
+          <span class="stack-chip">Ansible</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-chip">Jenkins</span>
+          <span class="stack-chip active">GitHub Actions</span>
+          <span class="stack-chip">ArgoCD</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-chip active">Prometheus</span>
+          <span class="stack-chip active">Grafana</span>
+          <span class="stack-chip">ELK Stack</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-chip">Cisco</span>
+          <span class="stack-chip active">Palo Alto</span>
+          <span class="stack-chip">Fortinet</span>
+          <span class="stack-chip">Juniper</span>
+        </div>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:1rem;">
+          <div style="flex:1;text-align:center;">
+            <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);">50+</div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Technologies</div>
+          </div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);">12+</div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Certifications</div>
+          </div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);">8yr</div>
+            <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Avg. Experience</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-points">
+      <div class="why-point reveal">
+        <div class="why-num">01</div>
+        <div>
+          <div class="why-point-title">Outcome-Driven Engagement</div>
+          <p class="why-point-desc">Every project begins with clear KPIs and success metrics. We measure our work by the business value we create — reduced downtime, faster deploys, lower costs.</p>
+        </div>
+      </div>
+      <div class="why-point reveal">
+        <div class="why-num">02</div>
+        <div>
+          <div class="why-point-title">Embedded Team Model</div>
+          <p class="why-point-desc">We integrate directly with your engineering teams. No ivory-tower consulting — our engineers work shoulder-to-shoulder with yours until the solution is production-ready.</p>
+        </div>
+      </div>
+      <div class="why-point reveal">
+        <div class="why-num">03</div>
+        <div>
+          <div class="why-point-title">Security-First by Default</div>
+          <p class="why-point-desc">Security is never an afterthought. Every architecture, pipeline, and network design follows zero-trust principles and industry compliance standards from day one.</p>
+        </div>
+      </div>
+      <div class="why-point reveal">
+        <div class="why-num">04</div>
+        <div>
+          <div class="why-point-title">Knowledge Transfer Guarantee</div>
+          <p class="why-point-desc">We document everything and train your team. When we leave, your team owns and understands every system we built — no vendor lock-in, no black boxes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <p class="section-label reveal">How We Work</p>
+  <h2 class="section-title reveal">A Proven Process,<br/>Zero Surprises</h2>
+  <p class="section-desc reveal">From first call to final handover, our engagement model is structured to deliver on time and on budget.</p>
+
+  <div class="process-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Discovery & Assessment</div>
+      <p class="step-desc">We audit your current stack, understand your business goals, and identify gaps and quick wins.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <div class="step-title">Strategy & Roadmap</div>
+      <p class="step-desc">We deliver a prioritized technology roadmap with timelines, budgets, and risk assessments.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <div class="step-title">Implementation</div>
+      <p class="step-desc">Our engineers build and deploy with weekly sprints, transparent reporting, and continuous feedback loops.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">04</div>
+      <div class="step-title">Handover & Support</div>
+      <p class="step-desc">Full documentation, team training, and ongoing managed support options to keep you running smoothly.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+</section>
+
+<!-- TEAM EXPERTS -->
+<section id="team">
+  <div class="team-intro">
+    <div class="team-intro-text">
+      <p class="section-label reveal">Talk to Our Experts</p>
+      <h2 class="section-title reveal">The Specialists<br/>Behind Your Success</h2>
+      <p class="section-desc reveal" style="margin-bottom:0;">Every engagement is led by a named expert — not an anonymous team. You get direct access to the person accountable for your outcomes.</p>
+    </div>
+    <a href="#contact" class="btn-primary reveal" style="align-self:flex-start;">Book a Free Consultation →</a>
+  </div>
+
+  <div class="team-grid">
+
+    <!-- Mohammed Sameer -->
+    <div class="expert-card reveal">
+      <div class="expert-avatar">
+        <span class="expert-emoji">👨‍💻</span>
+        <span class="expert-initials">MS</span>
+      </div>
+      <div class="expert-body">
+        <div class="expert-name">Mohammed Sameer</div>
+        <div class="expert-role">Lead DevOps & Cloud Architect</div>
+        <p class="expert-bio">10+ years engineering scalable cloud-native systems. Specializes in zero-downtime pipelines, Kubernetes orchestration, and multi-cloud strategy for enterprise clients.</p>
+        <div class="expert-skills">
+          <span class="expert-skill">DevOps</span>
+          <span class="expert-skill">AWS / GCP</span>
+          <span class="expert-skill">Kubernetes</span>
+          <span class="expert-skill">Terraform</span>
+        </div>
+        <a href="#contact" class="expert-cta">Talk to Sameer <span>→</span><span class="avail-dot"></span></a>
+      </div>
+    </div>
+
+    <!-- William Harris -->
+    <div class="expert-card reveal">
+      <div class="expert-avatar">
+        <span class="expert-emoji">👨‍🔧</span>
+        <span class="expert-initials">WH</span>
+      </div>
+      <div class="expert-body">
+        <div class="expert-name">William Harris</div>
+        <div class="expert-role">Java & Application Support Lead</div>
+        <p class="expert-bio">Enterprise Java specialist with deep expertise in JVM performance tuning, Spring Boot microservices, and production incident management across regulated industries.</p>
+        <div class="expert-skills">
+          <span class="expert-skill">Java EE</span>
+          <span class="expert-skill">Spring Boot</span>
+          <span class="expert-skill">JVM Tuning</span>
+          <span class="expert-skill">WebLogic</span>
+        </div>
+        <a href="#contact" class="expert-cta">Talk to William <span>→</span><span class="avail-dot"></span></a>
+      </div>
+    </div>
+
+    <!-- Anurag Sinha -->
+    <div class="expert-card reveal">
+      <div class="expert-avatar">
+        <span class="expert-emoji">🛡️</span>
+        <span class="expert-initials">AS</span>
+      </div>
+      <div class="expert-body">
+        <div class="expert-name">Anurag Sinha</div>
+        <div class="expert-role">Cybersecurity & Compliance Expert</div>
+        <p class="expert-bio">Database compliance, security architecture, and regulatory frameworks are his domain. Certified across GDPR, PCI-DSS, SOX, and ISO 27001 with 9 years in enterprise risk management.</p>
+        <div class="expert-skills">
+          <span class="expert-skill">DB Security</span>
+          <span class="expert-skill">GDPR / SOX</span>
+          <span class="expert-skill">PCI-DSS</span>
+          <span class="expert-skill">SIEM</span>
+        </div>
+        <a href="#contact" class="expert-cta">Talk to Anurag <span>→</span><span class="avail-dot"></span></a>
+      </div>
+    </div>
+
+    <!-- Daipayan Sarkar -->
+    <div class="expert-card reveal">
+      <div class="expert-avatar">
+        <span class="expert-emoji">🌐</span>
+        <span class="expert-initials">DS</span>
+      </div>
+      <div class="expert-body">
+        <div class="expert-name">Daipayan Sarkar</div>
+        <div class="expert-role">Networking & Infrastructure Architect</div>
+        <p class="expert-bio">Designs resilient, high-throughput network architectures — from SD-WAN and zero-trust security models to data center buildouts and edge infrastructure for global enterprises.</p>
+        <div class="expert-skills">
+          <span class="expert-skill">SD-WAN</span>
+          <span class="expert-skill">Zero Trust</span>
+          <span class="expert-skill">Cisco / Palo Alto</span>
+          <span class="expert-skill">BGP / OSPF</span>
+        </div>
+        <a href="#contact" class="expert-cta">Talk to Daipayan <span>→</span><span class="avail-dot"></span></a>
+      </div>
+    </div>
+
+    <!-- Prajwal Mahajan -->
+    <div class="expert-card reveal">
+      <div class="expert-avatar">
+        <span class="expert-emoji">📣</span>
+        <span class="expert-initials">PM</span>
+      </div>
+      <div class="expert-body">
+        <div class="expert-name">Prajwal Mahajan</div>
+        <div class="expert-role">Digital Marketing & Web Strategy Lead</div>
+        <p class="expert-bio">Drives digital growth through performance marketing, SEO, and conversion-focused web development. Has scaled organic traffic 3× and cut cost-per-lead by 60%+ for B2B clients.</p>
+        <div class="expert-skills">
+          <span class="expert-skill">SEO</span>
+          <span class="expert-skill">Google Ads</span>
+          <span class="expert-skill">Web Dev</span>
+          <span class="expert-skill">Analytics</span>
+        </div>
+        <a href="#contact" class="expert-cta">Talk to Prajwal <span>→</span><span class="avail-dot"></span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="team-cta-strip reveal">
+    <p><strong>Not sure who to speak with?</strong> Drop us a message and we'll connect you with the right expert for your specific challenge — within one business day.</p>
+    <a href="#contact" class="btn-primary">Get Matched to an Expert →</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="cta-box reveal">
+    <p class="section-label" style="justify-content:center;">Start a Conversation</p>
+    <h2 class="section-title">Talk to an Expert.<br/>Get Results.</h2>
+    <p>Our specialists respond within one business day. Tell us your challenge and we'll connect you with the right person — or let us match you ourselves.</p>
+
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="John"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Smith"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Business Email</label>
+        <input type="email" placeholder="john@company.com"/>
+      </div>
+      <div class="form-group">
+        <label>Talk to a Specific Expert (optional)</label>
+        <select>
+          <option value="" selected>No preference — match me to the right person</option>
+          <option>Mohammed Sameer — DevOps & Cloud Architecture</option>
+          <option>William Harris — Java & Application Support</option>
+          <option>Anurag Sinha — Cybersecurity & DB Compliance</option>
+          <option>Daipayan Sarkar — Networking & Infrastructure</option>
+          <option>Prajwal Mahajan — Digital Marketing & Web Strategy</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <select>
+          <option value="" disabled selected>Select a service...</option>
+          <optgroup label="Website & Digital Marketing">
+            <option>Business Website Development</option>
+            <option>Digital Marketing Strategy</option>
+            <option>SEO & Search Visibility</option>
+            <option>Performance & Paid Media</option>
+            <option>Content & Brand Marketing</option>
+            <option>Analytics & Growth Reporting</option>
+          </optgroup>
+          <optgroup label="IT & Application Services">
+            <option>Java Application Support</option>
+            <option>Web & Application Server Management</option>
+            <option>Database Compliance & Security</option>
+            <option>Zero Downtime Deployment Strategy</option>
+            <option>DevOps & CI/CD Engineering</option>
+            <option>Cloud Architecture & Migration</option>
+            <option>Application Modernization</option>
+            <option>Networking & Infrastructure</option>
+            <option>Cybersecurity & Compliance</option>
+            <option>IT Strategy & Consulting</option>
+          </optgroup>
+          <option>Other / Multiple Services</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tell us about your project</label>
+        <textarea placeholder="Describe your current challenges and what you're hoping to achieve..."></textarea>
+      </div>
+      <button class="btn-primary" style="align-self:stretch;padding:1rem;">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">meto<span>cart</span></a>
+      <p>Enterprise IT consulting, website development, and digital marketing — built on engineering excellence and business results.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Digital & Marketing</h4>
+      <ul>
+        <li><a href="#">Website Development</a></li>
+        <li><a href="#">Digital Strategy</a></li>
+        <li><a href="#">SEO & Search</a></li>
+        <li><a href="#">Paid Media</a></li>
+        <li><a href="#">Content Marketing</a></li>
+        <li><a href="#">Analytics & Reporting</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>IT Services</h4>
+      <ul>
+        <li><a href="#">Java App Support</a></li>
+        <li><a href="#">Web & App Servers</a></li>
+        <li><a href="#">DB Compliance</a></li>
+        <li><a href="#">Zero Downtime</a></li>
+        <li><a href="#">DevOps Engineering</a></li>
+        <li><a href="#">Cloud Migration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Our Experts</h4>
+      <ul>
+        <li><a href="#team">Mohammed Sameer</a></li>
+        <li><a href="#team">William Harris</a></li>
+        <li><a href="#team">Anurag Sinha</a></li>
+        <li><a href="#team">Daipayan Sarkar</a></li>
+        <li><a href="#team">Prajwal Mahajan</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:hello@metocart.com">hello@metocart.com</a></li>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">GitHub</a></li>
+        <li><a href="#">Twitter / X</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Metocart. All rights reserved.</span>
+    <span>Privacy Policy · Terms of Service</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Smooth active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--accent)' : '';
+    });
+  });
+
+  // Form submit feedback
+  document.querySelector('.contact-form .btn-primary').addEventListener('click', function() {
+    this.textContent = '✓ Message Sent!';
+    this.style.background = 'linear-gradient(135deg, #0a8a4a, #0fc274)';
+    setTimeout(() => {
+      this.textContent = 'Send Message →';
+      this.style.background = '';
+    }, 3000);
+  });
+</script>
+</body>
+</html>
